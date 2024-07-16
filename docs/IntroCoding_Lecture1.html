@@ -207,6 +207,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./IntroCoding_Lecture9.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Subplots and Pivoting</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IntroCoding_Lecture10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Dates and Times</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -221,6 +226,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#slicing" id="toc-slicing" class="nav-link" data-scroll-target="#slicing">Slicing</a></li>
   <li><a href="#manipulating-lists-of-lists" id="toc-manipulating-lists-of-lists" class="nav-link" data-scroll-target="#manipulating-lists-of-lists">Manipulating lists of lists</a></li>
   <li><a href="#automation-by-iterating" id="toc-automation-by-iterating" class="nav-link" data-scroll-target="#automation-by-iterating">Automation by iterating</a></li>
+  <li><a href="#cumulative-means-or-sums" id="toc-cumulative-means-or-sums" class="nav-link" data-scroll-target="#cumulative-means-or-sums">Cumulative Means or Sums</a></li>
+  <li><a href="#iterators-optional" id="toc-iterators-optional" class="nav-link" data-scroll-target="#iterators-optional">Iterators (Optional)</a></li>
+  <li><a href="#conditions" id="toc-conditions" class="nav-link" data-scroll-target="#conditions">Conditions</a></li>
   </ul>
 </nav>
     </div>
@@ -387,164 +395,132 @@ Illustration of Python slicing conventions
 <p><strong>for loops</strong> are a powerful way of automating MANY otherwise tedious tasks that repeat.</p>
 <p>The syntax template is (watch the indentation!):</p>
 <pre><code>for var in seq :
-     expression
-
-
-::: {.cell execution_count=23}
-``` {.python .cell-code}
-#We can use lists:
-for f in fam:
-    print(f)
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-1.73
+     expression</code></pre>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We can use lists:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> fam:</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.73
 1.68
 1.71
-1.89
-```
-:::
-:::
-
-
-::: {.cell execution_count=24}
-``` {.python .cell-code}
-#or iterators
-for i in range(len(fam)):
-    print(fam[i])
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-1.73
+1.89</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or iterators</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(fam)):</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(fam[i])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.73
 1.68
 1.71
-1.89
-```
-:::
-:::
-
-
-::: {.cell execution_count=26}
-``` {.python .cell-code}
-#or enumerate
-for i,f in enumerate(fam):
-    print(fam[i], f)
-
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-1.73 1.73
+1.89</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or enumerate</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,f <span class="kw">in</span> <span class="bu">enumerate</span>(fam):</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(fam[i], f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.73 1.73
 1.68 1.68
 1.71 1.71
-1.89 1.89
-```
-:::
-:::
-
-
-### Iterators (Optional)
-
-An iterator is an object that contains a countable number of values.
-
-An iterator is an object that can be iterated upon, meaning that you can traverse through all the values.
-
-Technically, in Python, an iterator is an object which implements the iterator protocol, which consist of the methods `iter()` and `next()`.
-
-::: {.cell execution_count=5}
-``` {.python .cell-code}
-mytuple = ("apple", "banana", "cherry")
-myit = iter(mytuple)
-
-print(next(myit))
-print(next(myit))
-
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-apple
-banana
-```
-:::
-:::
-
-
-::: {.cell execution_count=6}
-``` {.python .cell-code}
-mystr = "banana"
-myit = iter(mystr)
-
-print(next(myit))
-print(next(myit))
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-b
-a
-```
-:::
-:::
-
-
-Strings are also iterable objects, containing a sequence of characters:
-
-::: {.cell execution_count=4}
-``` {.python .cell-code}
-#funny iterators
-print(range(5))
-list(range(5))
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-range(0, 5)
-```
-:::
-
-::: {.cell-output .cell-output-display execution_count=4}
-```
-[0, 1, 2, 3, 4]
-```
-:::
-:::
-
-
-1. Repeat the tasks 2 and 4 from above by using a for loop
-    - using `enumerate`
-    - using `range`
-2. Create two separates new lists which contain only the names and areas separately
-3. [Clever Carl](https://nrich.maths.org/2478#:~:text=Gauss%20added%20the%20rows%20pairwise,quantity%20in%20a%20clever%20way.): Compute 
-$$
+1.89 1.89</code></pre>
+</div>
+</div>
+</section>
+<section id="cumulative-means-or-sums" class="level3">
+<h3 class="anchored" data-anchor-id="cumulative-means-or-sums">Cumulative Means or Sums</h3>
+<p>As an example for a for loop, let us try to compute a “running mean” or a “cumulative sum” which is often and easily done in spreadsheets.</p>
+<p>For example, can you compute the cumulative sum of a probability table:</p>
+<pre><code>prob = [0.05,0.1,0.2,0.25,0.15,0.1,0.1,0.05]</code></pre>
+<p>first in Excel, then in python.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> [<span class="fl">0.05</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.25</span>,<span class="fl">0.15</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.05</span>]</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>CumProb <span class="op">=</span> prob[<span class="dv">0</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,p <span class="kw">in</span> <span class="bu">enumerate</span>(prob):</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i<span class="op">==</span><span class="dv">0</span>): </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        CumProb <span class="op">=</span> [p]</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        pCum <span class="op">=</span> <span class="bu">round</span>(CumProb[i<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> p,<span class="dv">2</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        CumProb.append(pCum)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>CumProb </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>[0.05, 0.15, 0.35, 0.6, 0.75, 0.85, 0.95, 1.0]</code></pre>
+</div>
+</div>
+<p>Comment: We will get to know pandas data frames later and learn about the convenient <code>cumsum()</code> method for pandas objects.</p>
+</section>
+<section id="iterators-optional" class="level3">
+<h3 class="anchored" data-anchor-id="iterators-optional">Iterators (Optional)</h3>
+<p>An iterator is an object that contains a countable number of values.</p>
+<p>An iterator is an object that can be iterated upon, meaning that you can traverse through all the values.</p>
+<p>Technically, in Python, an iterator is an object which implements the iterator protocol, which consist of the methods <code>iter()</code> and <code>next()</code>.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mytuple <span class="op">=</span> (<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>myit <span class="op">=</span> <span class="bu">iter</span>(mytuple)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(myit))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(myit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>apple
+banana</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mystr <span class="op">=</span> <span class="st">"banana"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>myit <span class="op">=</span> <span class="bu">iter</span>(mystr)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(myit))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(myit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>b
+a</code></pre>
+</div>
+</div>
+<p>Strings are also iterable objects, containing a sequence of characters:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#funny iterators</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">range</span>(<span class="dv">5</span>))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>range(0, 5)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>[0, 1, 2, 3, 4]</code></pre>
+</div>
+</div>
+<ol type="1">
+<li>Repeat the tasks 2 and 4 from above by using a for loop
+<ul>
+<li>using <code>enumerate</code></li>
+<li>using <code>range</code></li>
+</ul></li>
+<li>Create two separates new lists which contain only the names and areas separately</li>
+<li><a href="https://nrich.maths.org/2478#:~:text=Gauss%20added%20the%20rows%20pairwise,quantity%20in%20a%20clever%20way.">Clever Carl</a>: Compute</li>
+</ol>
+<p><span class="math display">\[
 \sum_{i=1}^{100}{i}
-$$ 
-
-
-::: {.cell execution_count=27}
-``` {.python .cell-code}
-
-```
-
-::: {.cell-output .cell-output-display execution_count=27}
-```
-[0, 1, 2, 3, 4]
-```
-:::
-:::
-
-
-### Conditions
-
-The syntax template is (watch the indentation!):
-</code></pre>
-<p>if condition: expression</p>
+\]</span></p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>[0, 1, 2, 3, 4]</code></pre>
+</div>
+</div>
+</section>
+<section id="conditions" class="level3">
+<h3 class="anchored" data-anchor-id="conditions">Conditions</h3>
+<p>The syntax template is (watch the indentation!):</p>
+<pre><code>if condition:
+     expression</code></pre>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> fam:</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> f <span class="op">&gt;</span> <span class="fl">1.8</span>:</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> fam:</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> f <span class="op">&gt;</span> <span class="fl">1.8</span>:</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1.89</code></pre>
 </div>
